@@ -14,6 +14,9 @@ importers:
       '@slidev/theme-default':
         specifier: ^0.25.0
         version: 0.25.0
+      skills:
+        specifier: 1.5.11
+        version: 1.5.11
       slidev-theme-dracula:
         specifier: ^0.2.0
         version: 0.2.0
@@ -2359,6 +2362,11 @@ packages:
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
+
+  skills@1.5.11:
+    resolution: {integrity: sha512-QDGca7EqRpbFQFKESTZm0+rlY8yg4PTAQatvJu+jsTmtDLfApsHdNG+QaKc0MuRhzOH7OW0FdDRcSPTDM+KpNg==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   slidev-theme-dracula@0.2.0:
     resolution: {integrity: sha512-ndMD27+gUNYt9aXrb4/0vSBHKP007mpD2eCJppzhqXDG1DmN0Q6I6iFz+QvIjOPDKzzPjoYZbsWp6lPLJjgs9g==}
@@ -5569,6 +5577,10 @@ snapshots:
       totalist: 3.0.1
 
   sisteransi@1.0.5: {}
+
+  skills@1.5.11:
+    dependencies:
+      yaml: 2.9.0
 
   slidev-theme-dracula@0.2.0:
     dependencies:

@@ -8,11 +8,16 @@
     "serve": "slidev --port 3030 --remote",
     "build": "slidev build",
     "build:pages": "slidev build --base \"${BASE_PATH:-/}\"",
-    "export": "slidev export"
+    "export": "slidev export",
+    "postinstall": "node scripts/install-skills.mjs",
+    "skills:install": "skills experimental_install",
+    "skills:list": "skills list",
+    "skills:update": "skills update -p -y"
   },
   "devDependencies": {
     "@slidev/cli": "52.15.2",
     "@slidev/theme-default": "^0.25.0",
+    "skills": "1.5.11",
     "slidev-theme-dracula": "^0.2.0"
   }
 }
