@@ -39,8 +39,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        env:
-          SKIP_SKILLS_INSTALL: 1
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6

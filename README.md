@@ -21,6 +21,7 @@ If Corepack is available:
 ```bash
 corepack enable
 pnpm install
+pnpm run skills:install
 ```
 
 ## Local Development
@@ -78,8 +79,8 @@ This template treats project skills like generated dependencies.
 
 - `skills-lock.json` is committed and is the source of truth.
 - `.agents/skills/` is generated locally and ignored by Git.
-- `pnpm install` restores skills locally through `postinstall`.
-- CI skips skill restoration automatically.
+- Restore skills manually after installing dependencies.
+- CI does not install project skills because Slidev build does not need them.
 
 Useful commands:
 
@@ -87,12 +88,6 @@ Useful commands:
 pnpm run skills:install
 pnpm run skills:list
 pnpm run skills:update
-```
-
-To skip local skill restoration:
-
-```bash
-SKIP_SKILLS_INSTALL=1 pnpm install
 ```
 
 ## Repository Structure
@@ -103,8 +98,6 @@ SKIP_SKILLS_INSTALL=1 pnpm install
 ├── package.json
 ├── pnpm-lock.yaml
 ├── skills-lock.json
-├── scripts/
-│   └── install-skills.mjs
 └── .github/workflows/
     └── deploy-pages.yml
 ```
