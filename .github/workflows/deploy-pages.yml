@@ -4,23 +4,12 @@ on:
   push:
     branches:
       - main
-    paths:
-      - ".github/workflows/deploy-pages.yml"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "slides.md"
-      - "assets/**"
-      - "components/**"
-      - "global-*.vue"
-      - "layouts/**"
-      - "pages/**"
-      - "public/**"
-      - "setup/**"
-      - "snippets/**"
-      - "src/**"
-      - "styles/**"
-      - "uno.config.*"
-      - "vite.config.*"
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+      - ".vscode/**"
+      - ".agents/**"
+      - "skills-lock.json"
   workflow_dispatch:
 
 permissions:
