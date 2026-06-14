@@ -1,0 +1,18 @@
+{
+  "name": "slidev-project-template",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@11.6.0",
+  "scripts": {
+    "dev": "slidev --open",
+    "serve": "slidev --port 3030 --remote",
+    "build": "slidev build",
+    "build:pages": "slidev build --base \"${BASE_PATH:-/}\"",
+    "export": "slidev export"
+  },
+  "devDependencies": {
+    "@slidev/cli": "52.15.2",
+    "@slidev/theme-default": "^0.25.0",
+    "slidev-theme-dracula": "^0.2.0"
+  }
+}
