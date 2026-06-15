@@ -14,6 +14,12 @@ importers:
       '@slidev/theme-default':
         specifier: ^0.25.0
         version: 0.25.0
+      prettier:
+        specifier: ^3.8.4
+        version: 3.8.4
+      prettier-plugin-slidev:
+        specifier: ^1.0.5
+        version: 1.0.5(prettier@3.8.4)
       skills:
         specifier: 1.5.11
         version: 1.5.11
@@ -637,6 +643,10 @@ packages:
     resolution: {integrity: sha512-Xap+5k4wN6mcz1loxbxr2s6Du7fA2LlWjUCdI8n9SXcv2NhokCpSsEKynsOeOJ57mQAU5ZNrl9xrJCYynufVnw==}
     engines: {node: '>=20.12.0'}
 
+  '@slidev/parser@0.47.4':
+    resolution: {integrity: sha512-hm1lhAlBMa7sqgjLtcJtcaOrlMNhqImitFSr7Z4e77eDWPYNeIQ+FSxcB4lcHoMXG+rvKgHtyrDn06EqcWvfUg==}
+    engines: {node: '>=18.0.0'}
+
   '@slidev/parser@52.15.2':
     resolution: {integrity: sha512-abXwVqgetKta1OSVkO8sJSo77PbMF3aupO6DYFy9jslOfeKEmxXDCuETRosRzSQ4M9srFc0c0qDNw2vaDc0XuA==}
     engines: {node: '>=20.12.0'}
@@ -654,6 +664,10 @@ packages:
 
   '@slidev/types@0.47.0':
     resolution: {integrity: sha512-no9gzrbj15+i5uKhuagOoaizo4hxXnwo+Tz33c2zu+XqRQ1uwxxkXLzHtIGxJHT1RcfPfpcKNrHLDGzDofap6A==}
+    engines: {node: '>=18.0.0'}
+
+  '@slidev/types@0.47.4':
+    resolution: {integrity: sha512-V+kDQ2Uv/VWaPT0a6vd/XXb+ApH66hfGR3FF84EzOf3BoyT2o21kMUjHJPUXgDMimb+vxjZVMgGItH2oIu1FWw==}
     engines: {node: '>=18.0.0'}
 
   '@slidev/types@52.15.2':
@@ -2209,6 +2223,16 @@ packages:
   pptxgenjs@4.0.1:
     resolution: {integrity: sha512-TeJISr8wouAuXw4C1F/mC33xbZs/FuEG6nH9FG1Zj+nuPcGMP5YRHl6X+j3HSUnS1f3at6k75ZZXPMZlA5Lj9A==}
 
+  prettier-plugin-slidev@1.0.5:
+    resolution: {integrity: sha512-1xaKzOAX17QAcn1roUgQIAfeio3HPYYefCgzxh6Bzk+5rJJxq0I8HUhLrUyv9nCpIP6e9CDv/yDQSdEeqqRUuA==}
+    peerDependencies:
+      prettier: ^3.2.4
+
+  prettier@3.8.4:
+    resolution: {integrity: sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   prism-theme-vars@0.2.5:
     resolution: {integrity: sha512-/D8gBTScYzi9afwE6v3TC1U/1YFZ6k+ly17mtVRdLpGy7E79YjJJWkXFgUDHJ2gDksV/ZnXF7ydJ4TvoDm2z/Q==}
 
@@ -3537,6 +3561,11 @@ snapshots:
       - svelte
       - vite
 
+  '@slidev/parser@0.47.4':
+    dependencies:
+      '@slidev/types': 0.47.4
+      js-yaml: 4.2.0
+
   '@slidev/parser@52.15.2(@nuxt/kit@3.21.8)(@vue/compiler-sfc@3.5.38)(typescript@5.9.3)(vite@8.0.16(@types/node@22.19.21)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
       '@antfu/utils': 9.3.0
@@ -3571,6 +3600,8 @@ snapshots:
   '@slidev/types@0.42.5': {}
 
   '@slidev/types@0.47.0': {}
+
+  '@slidev/types@0.47.4': {}
 
   '@slidev/types@52.15.2(@nuxt/kit@3.21.8)(@vue/compiler-sfc@3.5.38)(typescript@5.9.3)(vite@8.0.16(@types/node@22.19.21)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
@@ -5424,6 +5455,13 @@ snapshots:
       https: 1.0.0
       image-size: 1.2.1
       jszip: 3.10.1
+
+  prettier-plugin-slidev@1.0.5(prettier@3.8.4):
+    dependencies:
+      '@slidev/parser': 0.47.4
+      prettier: 3.8.4
+
+  prettier@3.8.4: {}
 
   prism-theme-vars@0.2.5: {}
 
