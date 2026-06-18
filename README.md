@@ -5,7 +5,7 @@ A reusable [Slidev](https://sli.dev/) template for building multiple presentatio
 ## Use This Template
 
 1. Create a new repository from this template.
-2. Edit `slides.md` or add more decks in `decks.config.mjs`.
+2. Edit `decks/template/slides.md` or add a new deck under `decks/`.
 3. Push to `main`.
 4. In GitHub, open `Settings` -> `Pages`, then set `Build and deployment` to `GitHub Actions`.
 
@@ -26,34 +26,28 @@ pnpm run skills:install
 
 ## Local Development
 
-Build the full static site and preview the home page:
+Preview the default template deck with Slidev hot reload:
 
 ```bash
 pnpm run dev
 ```
 
-The generated site is served at:
-
-```text
-http://127.0.0.1:4173/
-```
-
-For Slidev's interactive editor and hot reload, preview one deck directly:
+Preview another deck entry:
 
 ```bash
-pnpm run dev:deck
-```
-
-To preview another deck entry:
-
-```bash
-pnpm run dev:deck -- path/to/slides.md
+pnpm run dev:deck -- decks/demo/slides.md
 ```
 
 To expose a deck preview on the local network:
 
 ```bash
-pnpm run serve:deck
+pnpm run serve:deck -- decks/demo/slides.md
+```
+
+Build and preview the full static site:
+
+```bash
+pnpm run preview
 ```
 
 ## Build
@@ -64,12 +58,16 @@ pnpm run build
 
 The static site is generated in `dist/`.
 
-The home page is generated at `dist/index.html`. Each deck is generated under its configured slug, for example:
+The home page is generated at `dist/index.html`. Each deck is generated under its configured directory slug:
 
 ```text
 dist/
 ├── index.html
-└── slides/
+├── styles.css
+├── template/
+│   ├── index.html
+│   └── assets/
+└── demo/
     ├── index.html
     └── assets/
 ```
@@ -87,25 +85,33 @@ The workflow sets `BASE_PATH` automatically:
 
 ## Decks
 
-Decks are declared in `decks.config.mjs`:
+Each deck lives in `decks/<slug>/`:
 
-```js
-export default [
-  {
-    slug: "slides",
-    title: "Slidev Project Template",
-    entry: "slides.md",
-    description:
-      "A reusable Slidev template for static GitHub Pages deployment.",
-  },
-];
+```text
+decks/
+├── template/
+│   ├── deck.json
+│   └── slides.md
+└── demo/
+    ├── deck.json
+    └── slides.md
 ```
 
-- `slug` is the public subroute, such as `/slides/`.
-- `title` and `description` are shown on the home page.
-- `entry` points to the Slidev markdown file.
+`deck.json` provides the home page metadata:
 
-Add another object to the array to publish another deck.
+```json
+{
+  "title": "Multi Deck Demo",
+  "description": "A second Slidev deck that demonstrates multi-deck publishing.",
+  "order": 2
+}
+```
+
+- The directory name is the public route, such as `/demo/`.
+- `title` and `description` are shown on the home page.
+- `order` controls home page sorting.
+
+To add another deck, copy `decks/demo/` to `decks/my-talk/`, update `deck.json`, edit `slides.md`, then run `pnpm run build`.
 
 ## Export
 
@@ -140,11 +146,14 @@ pnpm run skills:update
 
 ```text
 .
-├── decks.config.mjs
+├── decks/
+│   ├── template/
+│   └── demo/
+├── site/
+│   ├── index.html
+│   └── styles.css
 ├── scripts/
-│   ├── build-site.mjs
-│   └── preview-dist.mjs
-├── slides.md
+│   └── build-site.mjs
 ├── package.json
 ├── pnpm-lock.yaml
 ├── skills-lock.json
@@ -154,8 +163,8 @@ pnpm run skills:update
 
 ## Maintenance
 
-- Edit slide content in `slides.md`.
-- Add or reorder decks in `decks.config.mjs`.
+- Edit slide content in `decks/<slug>/slides.md`.
+- Edit deck metadata in `decks/<slug>/deck.json`.
 - Keep dependencies reproducible with `pnpm-lock.yaml`.
 - Run `pnpm run build` before pushing meaningful slide changes.
 - Run `pnpm run skills:update` when intentionally refreshing project skills.
