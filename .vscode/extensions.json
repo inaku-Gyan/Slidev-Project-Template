@@ -1,8 +1,8 @@
 {
-    "recommendations": [
-        "antfu.slidev",
-        "esbenp.prettier-vscode",
-        "github.vscode-github-actions",
-        "Vue.volar"
-    ]
+  "recommendations": [
+    "antfu.slidev",
+    "esbenp.prettier-vscode",
+    "github.vscode-github-actions",
+    "Vue.volar"
+  ]
 }

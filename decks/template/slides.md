@@ -34,7 +34,7 @@ pnpm install
 pnpm run dev
 ```
 
-Edit `slides.md` and Slidev will update the preview automatically.
+Edit `decks/template/slides.md` and Slidev will update the preview automatically.
 
 ---
 
@@ -52,7 +52,7 @@ For GitHub Pages project sites, the deployment workflow sets the correct base pa
 
 # Customize The Deck
 
-Update the frontmatter at the top of `slides.md`:
+Update the frontmatter at the top of `decks/template/slides.md`:
 
 ```yaml
 theme: dracula
