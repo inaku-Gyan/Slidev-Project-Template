@@ -124,6 +124,13 @@ h1 {
   text-transform: uppercase;
 }
 
+.text-link {
+  color: var(--accent-strong);
+  font-weight: 700;
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.22em;
+}
+
 @media (max-width: 640px) {
   main {
     width: min(100% - 28px, 1080px);

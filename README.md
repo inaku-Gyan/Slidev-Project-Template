@@ -63,10 +63,13 @@ The home page is generated at `dist/index.html`. Each deck is generated under it
 ```text
 dist/
 ├── index.html
+├── 404.html
 ├── styles.css
+├── template.html
 ├── template/
 │   ├── index.html
 │   └── assets/
+├── demo.html
 └── demo/
     ├── index.html
     └── assets/
@@ -82,6 +85,16 @@ The workflow sets `BASE_PATH` automatically:
 
 - `https://<user>.github.io/` repositories build with `/`
 - normal project repositories build with `/<repo-name>/`
+
+## Routes
+
+The generated site uses static file routes:
+
+- `/` opens the deck index.
+- `/template/` opens the template deck.
+- `/demo/` opens the demo deck.
+- `/template` and `/demo` redirect to the matching trailing-slash route.
+- Unknown paths such as `/unknown`, `/template/foo`, and `/demo/foo` return 404.
 
 ## Decks
 

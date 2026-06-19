@@ -158,6 +158,12 @@ async function renderHomePage(decks, basePath) {
     .replace("{{DECK_CARDS}}", renderDeckCards(decks, basePath));
 }
 
+async function renderNotFoundPage(basePath) {
+  const template = await readFile(join(siteDir, "404.html"), "utf8");
+
+  return template.replaceAll("{{BASE_PATH}}", escapeHtml(basePath));
+}
+
 function runSlidevBuild(deck, basePath) {
   const outputDir = join(distDir, deck.slug);
   const deckBase = `${basePath}${deck.slug}/`;
@@ -204,6 +210,10 @@ async function main() {
   await writeFile(
     join(distDir, "index.html"),
     await renderHomePage(decks, basePath),
+  );
+  await writeFile(
+    join(distDir, "404.html"),
+    await renderNotFoundPage(basePath),
   );
 }
 
