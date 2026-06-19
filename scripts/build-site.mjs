@@ -8,6 +8,12 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const decksDir = resolve(root, "decks");
 const siteDir = resolve(root, "site");
 const distDir = resolve(root, "dist");
+const slidevBin = join(
+  root,
+  "node_modules",
+  ".bin",
+  process.platform === "win32" ? "slidev.cmd" : "slidev",
+);
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -120,6 +126,30 @@ function renderDeckCards(decks, basePath) {
     .join("\n");
 }
 
+function renderRedirectPage(target, title) {
+  const escapedTarget = escapeHtml(target);
+  const escapedTitle = escapeHtml(title);
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=${escapedTarget}" />
+    <link rel="canonical" href="${escapedTarget}" />
+    <title>Redirecting to ${escapedTitle}</title>
+    <script>
+      window.location.replace(${JSON.stringify(target)});
+    </script>
+  </head>
+  <body>
+    <p>
+      Redirecting to <a href="${escapedTarget}">${escapedTitle}</a>.
+    </p>
+  </body>
+</html>
+`;
+}
+
 async function renderHomePage(decks, basePath) {
   const template = await readFile(join(siteDir, "index.html"), "utf8");
 
@@ -137,8 +167,8 @@ function runSlidevBuild(deck, basePath) {
   console.log(`Building ${entry} -> ${output}/`);
 
   const result = spawnSync(
-    "pnpm",
-    ["exec", "slidev", "build", entry, "--out", outputDir, "--base", deckBase],
+    slidevBin,
+    ["build", entry, "--out", outputDir, "--base", deckBase],
     {
       cwd: root,
       stdio: "inherit",
@@ -165,6 +195,10 @@ async function main() {
 
   for (const deck of decks) {
     runSlidevBuild(deck, basePath);
+    await writeFile(
+      join(distDir, `${deck.slug}.html`),
+      renderRedirectPage(`${basePath}${deck.slug}/`, deck.title),
+    );
   }
 
   await writeFile(
