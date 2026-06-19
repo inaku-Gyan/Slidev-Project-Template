@@ -174,7 +174,16 @@ function runSlidevBuild(deck, basePath) {
 
   const result = spawnSync(
     slidevBin,
-    ["build", entry, "--out", outputDir, "--base", deckBase],
+    [
+      "build",
+      entry,
+      "--out",
+      outputDir,
+      "--base",
+      deckBase,
+      "--router-mode",
+      "hash",
+    ],
     {
       cwd: root,
       stdio: "inherit",

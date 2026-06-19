@@ -95,6 +95,7 @@ The generated site uses static file routes:
 - `/demo/` opens the demo deck.
 - `/template` and `/demo` redirect to the matching trailing-slash route.
 - Unknown paths such as `/unknown`, `/template/foo`, and `/demo/foo` return 404.
+- Slide routes use hash URLs, such as `/template/#/1`, so page refreshes still request the real `/template/` entry.
 
 ## Decks
 
