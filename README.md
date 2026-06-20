@@ -143,7 +143,7 @@ To add another deck, copy `decks/demo/` to `decks/my-talk/`, update `deck.json`,
 ## Export
 
 ```bash
-pnpm run export
+pnpm export decks/template/slides.md
 ```
 
 If Chromium is missing, install it with:
