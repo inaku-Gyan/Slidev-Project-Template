@@ -91,7 +91,7 @@ dist/
 GitHub Pages uses:
 
 ```bash
-pnpm run build:pages
+pnpm run build
 ```
 
 The workflow sets `BASE_PATH` automatically:

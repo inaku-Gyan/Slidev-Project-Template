@@ -8,7 +8,6 @@
     "dev:deck": "node scripts/slidev-deck.mjs dev",
     "preview": "vite preview --host 0.0.0.0 --outDir dist --open",
     "build": "node scripts/build-site.mjs",
-    "build:pages": "node scripts/build-site.mjs",
     "export": "slidev export",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
