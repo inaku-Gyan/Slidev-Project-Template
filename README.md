@@ -26,16 +26,25 @@ pnpm run skills:install
 
 ## Local Development
 
-Preview the default template deck with Slidev hot reload:
+Preview the full deck index with hot reload:
 
 ```bash
-pnpm run dev
+pnpm dev
 ```
 
-Preview another deck entry:
+This starts a local index at `http://localhost:3030/` and proxies each
+discovered deck to its own Slidev dev server.
+
+Preview a single deck entry without the site proxy:
 
 ```bash
-pnpm run dev:deck -- decks/demo/slides.md
+pnpm dev decks/demo/slides.md
+```
+
+Pass extra Slidev options after `--`:
+
+```bash
+pnpm dev decks/demo/slides.md -- --port 4040
 ```
 
 To expose a deck preview on the local network:
