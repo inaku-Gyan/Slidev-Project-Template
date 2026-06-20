@@ -6,30 +6,16 @@
  */
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join, relative } from "node:path";
-import { spawnSync } from "node:child_process";
 import {
   discoverDecks,
   distDir,
   escapeHtml,
   normalizeBasePath,
+  renderDeckCards,
   root,
+  runSlidev,
   siteDir,
-  slidevBin,
 } from "./decks.mjs";
-
-function renderDeckCards(decks, basePath) {
-  return decks
-    .map((deck) => {
-      const href = `${basePath}${deck.slug}/`;
-
-      return `<a class="deck-card" href="${escapeHtml(href)}">
-  <span class="deck-card__route">/${escapeHtml(deck.slug)}/</span>
-  <strong>${escapeHtml(deck.title)}</strong>
-  <span>${escapeHtml(deck.description)}</span>
-</a>`;
-    })
-    .join("\n");
-}
 
 function renderRedirectPage(target, title) {
   const escapedTarget = escapeHtml(target);
@@ -77,24 +63,16 @@ function runSlidevBuild(deck, basePath) {
 
   console.log(`Building ${entry} -> ${output}/`);
 
-  const result = spawnSync(
-    slidevBin,
-    [
-      "build",
-      entry,
-      "--out",
-      outputDir,
-      "--base",
-      deckBase,
-      "--router-mode",
-      "hash",
-    ],
-    {
-      cwd: root,
-      stdio: "inherit",
-      env: process.env,
-    },
-  );
+  const result = runSlidev([
+    "build",
+    entry,
+    "--out",
+    outputDir,
+    "--base",
+    deckBase,
+    "--router-mode",
+    "hash",
+  ]);
 
   if (result.error) {
     throw result.error;

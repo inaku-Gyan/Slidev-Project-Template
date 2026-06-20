@@ -1,11 +1,12 @@
 /**
- * Shared deck discovery and validation helpers.
+ * Shared deck discovery, validation, rendering, and Slidev process helpers.
  *
  * Both the production build and full-site dev proxy use this module so they
  * agree on which `decks/<slug>/` directories are valid Slidev decks.
  */
 import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
+import { spawnSync } from "node:child_process";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -38,6 +39,49 @@ export function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+export function renderDeckCards(decks, basePath = "/") {
+  return decks
+    .map((deck) => {
+      const href = `${basePath}${deck.slug}/`;
+
+      return `<a class="deck-card" href="${escapeHtml(href)}">
+  <span class="deck-card__route">/${escapeHtml(deck.slug)}/</span>
+  <strong>${escapeHtml(deck.title)}</strong>
+  <span>${escapeHtml(deck.description)}</span>
+</a>`;
+    })
+    .join("\n");
+}
+
+export async function resolveDeckCommandArgs(args, { command, usage }) {
+  if (args[0] === "--") {
+    args.shift();
+  }
+
+  const slug = args[0] && !args[0].startsWith("-") ? args.shift() : undefined;
+
+  if (!slug) {
+    throw new Error(usage);
+  }
+
+  if (args[0] === "--") {
+    args.shift();
+  }
+
+  return {
+    args,
+    deck: await resolveDeckSlug(slug, command),
+  };
+}
+
+export function runSlidev(args) {
+  return spawnSync(slidevBin, args, {
+    cwd: root,
+    stdio: "inherit",
+    env: process.env,
+  });
 }
 
 async function readJson(filePath) {

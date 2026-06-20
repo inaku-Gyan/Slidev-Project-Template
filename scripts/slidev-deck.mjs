@@ -4,9 +4,8 @@
  * This is used by `pnpm dev <deck-slug>` when the caller wants one deck with
  * native Slidev hot reload and no site proxy.
  */
-import { spawnSync } from "node:child_process";
 import { relative } from "node:path";
-import { resolveDeckSlug, root, slidevBin } from "./decks.mjs";
+import { resolveDeckCommandArgs, root, runSlidev } from "./decks.mjs";
 
 const args = process.argv.slice(2);
 
@@ -14,41 +13,20 @@ if (args[0] === "dev") {
   args.shift();
 }
 
-if (args[0] === "--") {
-  args.shift();
-}
-
-const slug = args[0] && !args[0].startsWith("-") ? args.shift() : undefined;
-
-if (!slug) {
-  console.error(
-    `Usage: node ${relative(root, process.argv[1])} dev <deck-slug> [-- <slidev-options>]`,
-  );
-  process.exit(1);
-}
-
-if (args[0] === "--") {
-  args.shift();
-}
-
 let deck;
+let slidevArgs;
 
 try {
-  deck = await resolveDeckSlug(slug, "dev");
+  ({ args: slidevArgs, deck } = await resolveDeckCommandArgs(args, {
+    command: "dev",
+    usage: `Usage: node ${relative(root, process.argv[1])} dev <deck-slug> [-- <slidev-options>]`,
+  }));
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);
   process.exit(1);
 }
 
-const result = spawnSync(
-  slidevBin,
-  [relative(root, deck.entry), "--open", ...args],
-  {
-    cwd: root,
-    stdio: "inherit",
-    env: process.env,
-  },
-);
+const result = runSlidev([relative(root, deck.entry), "--open", ...slidevArgs]);
 
 if (result.error) {
   throw result.error;

@@ -19,8 +19,8 @@ import { readFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 import {
   discoverDecks,
-  escapeHtml,
   readDeck,
+  renderDeckCards,
   root,
   siteDir,
   slidevBin,
@@ -66,20 +66,6 @@ if (args.length > 0) {
     "Full-site dev mode does not accept Slidev options. Use `pnpm dev <deck-slug> -- <options>` for a single deck.",
   );
   process.exit(1);
-}
-
-function renderDeckCards(decks) {
-  return decks
-    .map((deck) => {
-      const href = `/${deck.slug}/`;
-
-      return `<a class="deck-card" href="${escapeHtml(href)}">
-  <span class="deck-card__route">/${escapeHtml(deck.slug)}/</span>
-  <strong>${escapeHtml(deck.title)}</strong>
-  <span>${escapeHtml(deck.description)}</span>
-</a>`;
-    })
-    .join("\n");
 }
 
 async function renderHomePage(startupDecks) {
