@@ -9,8 +9,6 @@ A reusable [Slidev](https://sli.dev/) template for building multiple presentatio
 3. Push to `main`.
 4. In GitHub, open `Settings` -> `Pages`, then set `Build and deployment` to `GitHub Actions`.
 
-To make this repository itself a template, enable `Settings` -> `General` -> `Template repository` after pushing it to GitHub.
-
 ## Requirements
 
 - Node.js 22
