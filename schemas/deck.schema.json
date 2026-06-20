@@ -13,6 +13,12 @@
       "type": "integer",
       "minimum": 1,
       "description": "Sort order for the generated deck index."
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["listed", "hidden", "disabled"],
+      "default": "listed",
+      "description": "Controls whether the deck appears in the generated site or is available only by direct command."
     }
   }
 }

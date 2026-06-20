@@ -134,12 +134,13 @@ info: |
 ---
 ```
 
-`deck.json` only controls site-level deck sorting:
+`deck.json` controls site-level sorting and visibility:
 
 ```json
 {
   "$schema": "../../schemas/deck.schema.json",
-  "order": 2
+  "order": 2,
+  "visibility": "listed"
 }
 ```
 
@@ -147,8 +148,12 @@ info: |
   and the public route, such as `/demo-one/`.
 - `title` and `info` from `slides.md` are shown on the home page.
 - `order` in `deck.json` controls home page sorting.
+- `visibility` in `deck.json` is optional and defaults to `listed`:
+  - `listed` appears on the home page and in full-site dev/build.
+  - `hidden` is skipped by full-site dev/build, but direct `pnpm dev <slug>` and `pnpm export <slug>` still work.
+  - `disabled` is treated as unavailable, including direct deck commands.
 
-To add another deck, copy `decks/demo-two/` to `decks/my-talk/`, update `order` in `deck.json`, edit `title` and `info` in `slides.md`, then run `pnpm run build`.
+To add another deck, copy `decks/demo-two/` to `decks/my-talk/`, update `order` and optional `visibility` in `deck.json`, edit `title` and `info` in `slides.md`, then run `pnpm run build`.
 
 ## Export
 
@@ -204,7 +209,7 @@ pnpm run skills:update
 
 - Edit slide content in `decks/<slug>/slides.md`.
 - Edit deck title and description in `decks/<slug>/slides.md` frontmatter.
-- Edit deck sort order in `decks/<slug>/deck.json`.
+- Edit deck sort order and visibility in `decks/<slug>/deck.json`.
 - Keep dependencies reproducible with `pnpm-lock.yaml`.
 - Run `pnpm run build` before pushing meaningful slide changes.
 - Run `pnpm run skills:update` when intentionally refreshing project skills.

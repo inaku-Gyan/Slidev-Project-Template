@@ -24,7 +24,8 @@ export const slidevBin = join(
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const pathLikePattern = /[\\/]|\.md$/i;
-const allowedDeckConfigKeys = new Set(["$schema", "order"]);
+const allowedDeckConfigKeys = new Set(["$schema", "order", "visibility"]);
+const visibilityValues = new Set(["listed", "hidden", "disabled"]);
 
 export function normalizeBasePath(value) {
   const raw = value?.trim() || "/";
@@ -121,7 +122,17 @@ function normalizeDescription(value) {
   return String(value).trim().replace(/\s+/g, " ");
 }
 
+function getVisibility(metadata) {
+  return metadata.visibility ?? "listed";
+}
+
 function validateDeckConfig(slug, metadata) {
+  if (!slugPattern.test(slug)) {
+    throw new Error(
+      `Invalid deck directory "${slug}". Use lowercase letters, numbers, and single hyphens.`,
+    );
+  }
+
   if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
     throw new Error(`${slug}/deck.json must be a JSON object.`);
   }
@@ -132,7 +143,7 @@ function validateDeckConfig(slug, metadata) {
 
   if (unknownKeys.length > 0) {
     throw new Error(
-      `${slug}/deck.json may only define $schema and order. Move title and info to slides.md frontmatter.`,
+      `${slug}/deck.json may only define $schema, order, and visibility. Move title and info to slides.md frontmatter.`,
     );
   }
 
@@ -142,6 +153,12 @@ function validateDeckConfig(slug, metadata) {
 
   if (!Number.isInteger(metadata.order) || metadata.order < 1) {
     throw new Error(`${slug}/deck.json order must be a positive integer.`);
+  }
+
+  if (!visibilityValues.has(getVisibility(metadata))) {
+    throw new Error(
+      `${slug}/deck.json visibility must be one of: listed, hidden, disabled.`,
+    );
   }
 }
 
@@ -189,20 +206,34 @@ function validateDeck(deck) {
   }
 }
 
-export async function readDeck(slug) {
+async function readDeckConfig(slug) {
   const deckDir = join(decksDir, slug);
   const metadataPath = join(deckDir, "deck.json");
-  const entry = join(deckDir, "slides.md");
 
   if (!existsSync(metadataPath)) {
     throw new Error(`${relative(root, deckDir)} is missing deck.json.`);
   }
 
-  const deck = { slug, entry };
-  validateDeck(deck);
-
   const metadata = await readJson(metadataPath);
   validateDeckConfig(slug, metadata);
+
+  return {
+    order: metadata.order,
+    visibility: getVisibility(metadata),
+  };
+}
+
+export async function readDeck(slug) {
+  const deckDir = join(decksDir, slug);
+  const entry = join(deckDir, "slides.md");
+  const metadata = await readDeckConfig(slug);
+
+  if (metadata.visibility === "disabled") {
+    throw new Error(`Deck "${slug}" is disabled in ${slug}/deck.json.`);
+  }
+
+  const deck = { slug, entry };
+  validateDeck(deck);
 
   const frontmatter = await readSlideFrontmatter(entry);
   validateSlideMetadata(entry, frontmatter);
@@ -212,6 +243,7 @@ export async function readDeck(slug) {
     title: frontmatter.title.trim(),
     description: normalizeDescription(frontmatter.info),
     order: metadata.order,
+    visibility: metadata.visibility,
     entry,
   };
 }
@@ -261,11 +293,19 @@ export async function discoverDecks() {
       continue;
     }
 
+    const metadata = await readDeckConfig(entry.name);
+
+    if (metadata.visibility !== "listed") {
+      continue;
+    }
+
     decks.push(await readDeck(entry.name));
   }
 
   if (decks.length === 0) {
-    throw new Error("No decks found. Add decks/<slug>/deck.json.");
+    throw new Error(
+      "No listed decks found. Add decks/<slug>/deck.json or set visibility to listed.",
+    );
   }
 
   return sortDecks(decks);
