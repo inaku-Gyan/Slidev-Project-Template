@@ -1,8 +1,8 @@
 ---
 theme: default
-title: "Multi Deck Demo"
+title: "Demo Two"
 info: |
-  A second Slidev deck that demonstrates multi-deck publishing.
+  A second demo deck that demonstrates multi-deck publishing.
 class: text-center
 drawings:
   persist: false
@@ -10,7 +10,7 @@ transition: fade
 mdc: true
 ---
 
-# Multi Deck Demo
+# Demo Two
 
 This is a second Slidev deck in the same static site.
 
@@ -20,10 +20,10 @@ This is a second Slidev deck in the same static site.
 
 ```text
 decks/
-├── template/
+├── demo-one/
 │   ├── deck.json
 │   └── slides.md
-└── demo/
+└── demo-two/
     ├── deck.json
     └── slides.md
 ```
@@ -37,13 +37,13 @@ Each directory is an independent deck.
 This deck is built from:
 
 ```text
-decks/demo/slides.md
+decks/demo-two/slides.md
 ```
 
 It is deployed to:
 
 ```text
-/demo/
+/demo-two/
 ```
 
 ---
@@ -53,7 +53,7 @@ It is deployed to:
 The home page reads this file:
 
 ```text
-decks/demo/deck.json
+decks/demo-two/deck.json
 ```
 
 It provides:
@@ -66,7 +66,7 @@ It provides:
 
 # Add Another Deck
 
-1. Copy `decks/demo/` to `decks/my-talk/`
+1. Copy `decks/demo-two/` to `decks/my-talk/`
 2. Update `decks/my-talk/deck.json`
 3. Edit `decks/my-talk/slides.md`
 4. Run `pnpm run build`

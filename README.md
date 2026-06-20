@@ -5,7 +5,7 @@ A reusable [Slidev](https://sli.dev/) template for building multiple presentatio
 ## Use This Template
 
 1. Create a new repository from this template.
-2. Edit `decks/template/slides.md` or add a new deck under `decks/`.
+2. Edit `decks/demo-one/slides.md` or add a new deck under `decks/`.
 3. Push to `main`.
 4. In GitHub, open `Settings` -> `Pages`, then set `Build and deployment` to `GitHub Actions`.
 
@@ -38,13 +38,13 @@ discovered deck to its own Slidev dev server.
 Preview a single deck by slug without the site proxy:
 
 ```bash
-pnpm dev demo
+pnpm dev demo-one
 ```
 
 Pass extra Slidev options after `--`:
 
 ```bash
-pnpm dev demo -- --port 4040
+pnpm dev demo-one -- --port 4040
 ```
 
 Build the full static site:
@@ -78,12 +78,12 @@ dist/
 ├── index.html
 ├── 404.html
 ├── styles.css
-├── template.html
-├── template/
+├── demo-one.html
+├── demo-one/
 │   ├── index.html
 │   └── assets/
-├── demo.html
-└── demo/
+├── demo-two.html
+└── demo-two/
     ├── index.html
     └── assets/
 ```
@@ -104,11 +104,11 @@ The workflow sets `BASE_PATH` automatically:
 The generated site uses static file routes:
 
 - `/` opens the deck index.
-- `/template/` opens the template deck.
-- `/demo/` opens the demo deck.
-- `/template` and `/demo` redirect to the matching trailing-slash route.
-- Unknown paths such as `/unknown`, `/template/foo`, and `/demo/foo` return 404.
-- Slide routes use hash URLs, such as `/template/#/1`, so page refreshes still request the real `/template/` entry.
+- `/demo-one/` opens the first demo deck.
+- `/demo-two/` opens the second demo deck.
+- `/demo-one` and `/demo-two` redirect to the matching trailing-slash route.
+- Unknown paths such as `/unknown`, `/demo-one/foo`, and `/demo-two/foo` return 404.
+- Slide routes use hash URLs, such as `/demo-one/#/1`, so page refreshes still request the real `/demo-one/` entry.
 
 ## Decks
 
@@ -116,10 +116,10 @@ Each deck lives in `decks/<slug>/`:
 
 ```text
 decks/
-├── template/
+├── demo-one/
 │   ├── deck.json
 │   └── slides.md
-└── demo/
+└── demo-two/
     ├── deck.json
     └── slides.md
 ```
@@ -128,23 +128,23 @@ decks/
 
 ```json
 {
-  "title": "Multi Deck Demo",
-  "description": "A second Slidev deck that demonstrates multi-deck publishing.",
+  "title": "Demo Two",
+  "description": "A second demo deck that demonstrates multi-deck publishing.",
   "order": 2
 }
 ```
 
-- The directory name is the deck slug for commands, such as `pnpm dev demo`,
-  and the public route, such as `/demo/`.
+- The directory name is the deck slug for commands, such as `pnpm dev demo-one`,
+  and the public route, such as `/demo-one/`.
 - `title` and `description` are shown on the home page.
 - `order` controls home page sorting.
 
-To add another deck, copy `decks/demo/` to `decks/my-talk/`, update `deck.json`, edit `slides.md`, then run `pnpm run build`.
+To add another deck, copy `decks/demo-two/` to `decks/my-talk/`, update `deck.json`, edit `slides.md`, then run `pnpm run build`.
 
 ## Export
 
 ```bash
-pnpm export template
+pnpm export demo-one
 ```
 
 If Chromium is missing, install it with:
@@ -175,8 +175,8 @@ pnpm run skills:update
 ```text
 .
 ├── decks/
-│   ├── template/
-│   └── demo/
+│   ├── demo-one/
+│   └── demo-two/
 ├── site/
 │   ├── index.html
 │   └── styles.css

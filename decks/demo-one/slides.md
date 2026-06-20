@@ -1,8 +1,8 @@
 ---
 theme: dracula
-title: "Slidev Project Template"
+title: "Demo One"
 info: |
-  A reusable Slidev template for static GitHub Pages deployment.
+  A first demo deck for static GitHub Pages deployment.
 class: text-center
 drawings:
   persist: false
@@ -10,15 +10,15 @@ transition: slide-left
 mdc: true
 ---
 
-# Slidev Project Template
+# Demo One
 
 Build, present, and publish slides with GitHub Pages
 
 ---
 
-# What This Template Includes
+# What This Project Includes
 
-- Slidev starter deck
+- Multiple demo decks
 - pnpm-based dependency management
 - Static production build
 - GitHub Pages deployment workflow
@@ -34,7 +34,7 @@ pnpm install
 pnpm run dev
 ```
 
-Edit `decks/template/slides.md` and Slidev will update the preview automatically.
+Edit `decks/demo-one/slides.md` and Slidev will update the preview automatically.
 
 ---
 
@@ -50,9 +50,9 @@ For GitHub Pages project sites, the deployment workflow sets the correct base pa
 
 ---
 
-# Customize The Deck
+# Customize A Deck
 
-Update the frontmatter at the top of `decks/template/slides.md`:
+Update the frontmatter at the top of `decks/demo-one/slides.md`:
 
 ```yaml
 theme: dracula
@@ -60,7 +60,7 @@ title: "My Presentation"
 transition: slide-left
 ```
 
-Then replace the starter slides with your own content.
+Then replace the demo slides with your own content.
 
 ---
 

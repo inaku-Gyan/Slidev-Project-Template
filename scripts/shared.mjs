@@ -150,7 +150,7 @@ export async function resolveDeckSlug(value, command) {
 
   if (pathLikePattern.test(value)) {
     throw new Error(
-      `Deck arguments use directory slugs, not slide paths. Use \`pnpm ${command} <deck-slug>\`, such as \`pnpm ${command} demo\`.`,
+      `Deck arguments use directory slugs, not slide paths. Use \`pnpm ${command} <deck-slug>\`, such as \`pnpm ${command} demo-one\`.`,
     );
   }
 
