@@ -16,11 +16,19 @@
     },
     "visibility": {
       "type": "string",
-      "enum": ["listed", "hidden", "disabled"],
-      "enumDescriptions": [
-        "Include this deck in the home page, full-site development proxy, and static site build.",
-        "Exclude this deck from the home page, full-site development proxy, and static site build, but still allow direct commands such as pnpm dev <slug> and pnpm export <slug>.",
-        "Treat this deck as unavailable. It is excluded from discovery and direct deck commands fail."
+      "oneOf": [
+        {
+          "const": "listed",
+          "description": "Include this deck in the home page, full-site development proxy, and static site build."
+        },
+        {
+          "const": "hidden",
+          "description": "Exclude this deck from the home page, full-site development proxy, and static site build, but still allow direct commands such as pnpm dev <slug> and pnpm export <slug>."
+        },
+        {
+          "const": "disabled",
+          "description": "Treat this deck as unavailable. It is excluded from discovery and direct deck commands fail."
+        }
       ],
       "default": "listed",
       "description": "Controls whether the deck is published by the full-site workflows. Omit this field for the default listed behavior."
