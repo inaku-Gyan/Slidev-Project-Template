@@ -47,17 +47,21 @@ Pass extra Slidev options after `--`:
 pnpm dev decks/demo/slides.md -- --port 4040
 ```
 
-To expose a deck preview on the local network:
+Build the full static site:
 
 ```bash
-pnpm run serve:deck -- decks/demo/slides.md
+pnpm run build
 ```
 
-Build and preview the full static site:
+Preview the existing static site output:
 
 ```bash
-pnpm run preview
+pnpm preview
 ```
+
+The preview server listens on all network interfaces, so devices on the same
+network can open the printed network URL. `pnpm preview` does not rebuild; run
+`pnpm run build` first after changing slides.
 
 ## Build
 
