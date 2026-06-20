@@ -35,16 +35,16 @@ pnpm dev
 This starts a local index at `http://localhost:3030/` and proxies each
 discovered deck to its own Slidev dev server.
 
-Preview a single deck entry without the site proxy:
+Preview a single deck by slug without the site proxy:
 
 ```bash
-pnpm dev decks/demo/slides.md
+pnpm dev demo
 ```
 
 Pass extra Slidev options after `--`:
 
 ```bash
-pnpm dev decks/demo/slides.md -- --port 4040
+pnpm dev demo -- --port 4040
 ```
 
 Build the full static site:
@@ -134,7 +134,8 @@ decks/
 }
 ```
 
-- The directory name is the public route, such as `/demo/`.
+- The directory name is the deck slug for commands, such as `pnpm dev demo`,
+  and the public route, such as `/demo/`.
 - `title` and `description` are shown on the home page.
 - `order` controls home page sorting.
 
@@ -143,7 +144,7 @@ To add another deck, copy `decks/demo/` to `decks/my-talk/`, update `deck.json`,
 ## Export
 
 ```bash
-pnpm export decks/template/slides.md
+pnpm export template
 ```
 
 If Chromium is missing, install it with:

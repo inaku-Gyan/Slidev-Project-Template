@@ -2,7 +2,7 @@
  * Development command dispatcher and full-site hot reload proxy.
  *
  * `pnpm dev` starts one index server on port 3030 and proxies each discovered
- * deck to its own Slidev dev server. `pnpm dev <slides.md>` delegates to the
+ * deck to its own Slidev dev server. `pnpm dev <deck-slug>` delegates to the
  * single-deck Slidev runner instead.
  */
 import { spawn, spawnSync } from "node:child_process";
@@ -36,17 +36,17 @@ if (args[0] === "--") {
   args.shift();
 }
 
-const singleDeckEntry =
+const singleDeckSlug =
   args[0] && !args[0].startsWith("-") ? args.shift() : undefined;
 
-if (singleDeckEntry) {
+if (singleDeckSlug) {
   if (args[0] === "--") {
     args.shift();
   }
 
   const result = spawnSync(
     process.execPath,
-    [join(root, "scripts", "slidev-deck.mjs"), "dev", singleDeckEntry, ...args],
+    [join(root, "scripts", "slidev-deck.mjs"), "dev", singleDeckSlug, ...args],
     {
       cwd: root,
       stdio: "inherit",
@@ -63,7 +63,7 @@ if (singleDeckEntry) {
 
 if (args.length > 0) {
   console.error(
-    "Full-site dev mode does not accept Slidev options. Use `pnpm dev <slides> -- <options>` for a single deck.",
+    "Full-site dev mode does not accept Slidev options. Use `pnpm dev <deck-slug> -- <options>` for a single deck.",
   );
   process.exit(1);
 }

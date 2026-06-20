@@ -7,7 +7,7 @@
     "dev": "node scripts/dev-site.mjs",
     "preview": "vite preview --host 0.0.0.0 --outDir dist --open",
     "build": "node scripts/build-site.mjs",
-    "export": "slidev export",
+    "export": "node scripts/export-deck.mjs",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "skills:install": "skills experimental_install",

@@ -21,6 +21,7 @@ export const slidevBin = join(
 );
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const pathLikePattern = /[\\/]|\.md$/i;
 
 export function normalizeBasePath(value) {
   const raw = value?.trim() || "/";
@@ -96,6 +97,35 @@ export async function readDeck(slug) {
 
   validateDeck(deck);
   return deck;
+}
+
+export async function resolveDeckSlug(value, command) {
+  if (!value) {
+    throw new Error(`Usage: pnpm ${command} <deck-slug>`);
+  }
+
+  if (pathLikePattern.test(value)) {
+    throw new Error(
+      `Deck arguments use directory slugs, not slide paths. Use \`pnpm ${command} <deck-slug>\`, such as \`pnpm ${command} demo\`.`,
+    );
+  }
+
+  if (!slugPattern.test(value)) {
+    throw new Error(
+      `Invalid deck slug "${value}". Use lowercase letters, numbers, and single hyphens.`,
+    );
+  }
+
+  const deckDir = join(decksDir, value);
+  const metadataPath = join(deckDir, "deck.json");
+
+  if (!existsSync(metadataPath)) {
+    throw new Error(
+      `Deck "${value}" was not found. Expected ${relative(root, metadataPath)}.`,
+    );
+  }
+
+  return readDeck(value);
 }
 
 export function sortDecks(decks) {
