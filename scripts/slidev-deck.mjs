@@ -1,17 +1,9 @@
 import { spawnSync } from "node:child_process";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { relative } from "node:path";
+import { root, slidevBin } from "./decks.mjs";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const defaultEntry = "decks/template/slides.md";
 const modes = new Set(["dev", "serve"]);
 const args = process.argv.slice(2);
-const slidevBin = join(
-  root,
-  "node_modules",
-  ".bin",
-  process.platform === "win32" ? "slidev.cmd" : "slidev",
-);
 
 let mode = "dev";
 
@@ -23,7 +15,14 @@ if (args[0] === "--") {
   args.shift();
 }
 
-const entry = args[0] && !args[0].startsWith("-") ? args.shift() : defaultEntry;
+const entry = args[0] && !args[0].startsWith("-") ? args.shift() : undefined;
+
+if (!entry) {
+  console.error(
+    `Usage: node ${relative(root, process.argv[1])} ${mode} <slides.md> [-- <slidev-options>]`,
+  );
+  process.exit(1);
+}
 
 if (args[0] === "--") {
   args.shift();

@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@11.6.0",
   "scripts": {
-    "dev": "node scripts/slidev-deck.mjs dev",
+    "dev": "node scripts/dev-site.mjs",
     "dev:deck": "node scripts/slidev-deck.mjs dev",
     "preview": "pnpm run build && vite preview --outDir dist --open",
     "serve:deck": "node scripts/slidev-deck.mjs serve",
