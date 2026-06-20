@@ -5,7 +5,7 @@
  * native Slidev hot reload and no site proxy.
  */
 import { relative } from "node:path";
-import { resolveDeckCommandArgs, root, runSlidev } from "./decks.mjs";
+import { resolveDeckCommandArgs, root, runSlidev } from "./shared.mjs";
 
 const args = process.argv.slice(2);
 

@@ -15,7 +15,7 @@ import {
   root,
   runSlidev,
   siteDir,
-} from "./decks.mjs";
+} from "./shared.mjs";
 
 function renderRedirectPage(target, title) {
   const escapedTarget = escapeHtml(target);

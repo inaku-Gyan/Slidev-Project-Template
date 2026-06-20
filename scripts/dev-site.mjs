@@ -25,7 +25,7 @@ import {
   siteDir,
   slidevBin,
   sortDecks,
-} from "./decks.mjs";
+} from "./shared.mjs";
 
 const host = "localhost";
 const sitePort = 3030;
