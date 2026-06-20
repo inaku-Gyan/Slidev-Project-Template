@@ -7,18 +7,23 @@
   "properties": {
     "$schema": {
       "type": "string",
-      "description": "JSON Schema reference for editor validation."
+      "description": "Relative path to this JSON Schema file. Keep this value so editors can provide validation, autocomplete, and inline documentation for deck.json."
     },
     "order": {
       "type": "integer",
       "minimum": 1,
-      "description": "Sort order for the generated deck index."
+      "description": "Positive integer used to sort listed decks on the generated home page. Lower numbers appear first; decks with the same order fall back to sorting by slug."
     },
     "visibility": {
       "type": "string",
       "enum": ["listed", "hidden", "disabled"],
+      "enumDescriptions": [
+        "Include this deck in the home page, full-site development proxy, and static site build.",
+        "Exclude this deck from the home page, full-site development proxy, and static site build, but still allow direct commands such as pnpm dev <slug> and pnpm export <slug>.",
+        "Treat this deck as unavailable. It is excluded from discovery and direct deck commands fail."
+      ],
       "default": "listed",
-      "description": "Controls whether the deck appears in the generated site or is available only by direct command."
+      "description": "Controls whether the deck is published by the full-site workflows. Omit this field for the default listed behavior."
     }
   }
 }
