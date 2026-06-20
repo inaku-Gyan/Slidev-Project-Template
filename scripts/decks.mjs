@@ -1,3 +1,9 @@
+/**
+ * Shared deck discovery and validation helpers.
+ *
+ * Both the production build and full-site dev proxy use this module so they
+ * agree on which `decks/<slug>/` directories are valid Slidev decks.
+ */
 import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";

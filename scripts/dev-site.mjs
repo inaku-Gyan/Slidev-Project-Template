@@ -1,3 +1,10 @@
+/**
+ * Development command dispatcher and full-site hot reload proxy.
+ *
+ * `pnpm dev` starts one index server on port 3030 and proxies each discovered
+ * deck to its own Slidev dev server. `pnpm dev <slides.md>` delegates to the
+ * single-deck Slidev runner instead.
+ */
 import { spawn, spawnSync } from "node:child_process";
 import {
   createServer as createHttpServer,

@@ -1,3 +1,9 @@
+/**
+ * Static site builder for all discovered decks.
+ *
+ * Generates `dist/` with a deck index, redirect helpers, shared site assets,
+ * and one Slidev static build per `decks/<slug>/slides.md`.
+ */
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { spawnSync } from "node:child_process";

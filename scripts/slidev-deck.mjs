@@ -1,3 +1,10 @@
+/**
+ * Single-deck Slidev development runner.
+ *
+ * This is used by `pnpm dev <slides.md>` and `pnpm run dev:deck -- <slides.md>`
+ * when the caller wants one deck with native Slidev hot reload and no site
+ * proxy.
+ */
 import { spawnSync } from "node:child_process";
 import { relative } from "node:path";
 import { root, slidevBin } from "./decks.mjs";
