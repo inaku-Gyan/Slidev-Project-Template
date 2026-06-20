@@ -25,6 +25,9 @@ importers:
       slidev-theme-dracula:
         specifier: ^0.2.0
         version: 0.2.0
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
 
 packages:
   "@antfu/install-pkg@1.1.0":

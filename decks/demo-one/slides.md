@@ -57,6 +57,8 @@ Update the frontmatter at the top of `decks/demo-one/slides.md`:
 ```yaml
 theme: dracula
 title: "My Presentation"
+info: |
+  A short description for the generated deck index.
 transition: slide-left
 ```
 

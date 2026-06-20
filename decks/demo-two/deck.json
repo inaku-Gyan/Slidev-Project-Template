@@ -1,5 +1,4 @@
 {
-  "title": "Demo Two",
-  "description": "A second demo deck that demonstrates multi-deck publishing.",
+  "$schema": "../../schemas/deck.schema.json",
   "order": 2
 }

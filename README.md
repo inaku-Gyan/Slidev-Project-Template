@@ -124,22 +124,31 @@ decks/
     └── slides.md
 ```
 
-`deck.json` provides the home page metadata:
+`slides.md` frontmatter provides the home page title and description:
+
+```yaml
+---
+title: "Demo Two"
+info: |
+  A second demo deck that demonstrates multi-deck publishing.
+---
+```
+
+`deck.json` only controls site-level deck sorting:
 
 ```json
 {
-  "title": "Demo Two",
-  "description": "A second demo deck that demonstrates multi-deck publishing.",
+  "$schema": "../../schemas/deck.schema.json",
   "order": 2
 }
 ```
 
 - The directory name is the deck slug for commands, such as `pnpm dev demo-one`,
   and the public route, such as `/demo-one/`.
-- `title` and `description` are shown on the home page.
-- `order` controls home page sorting.
+- `title` and `info` from `slides.md` are shown on the home page.
+- `order` in `deck.json` controls home page sorting.
 
-To add another deck, copy `decks/demo-two/` to `decks/my-talk/`, update `deck.json`, edit `slides.md`, then run `pnpm run build`.
+To add another deck, copy `decks/demo-two/` to `decks/my-talk/`, update `order` in `deck.json`, edit `title` and `info` in `slides.md`, then run `pnpm run build`.
 
 ## Export
 
@@ -180,6 +189,8 @@ pnpm run skills:update
 ├── site/
 │   ├── index.html
 │   └── styles.css
+├── schemas/
+│   └── deck.schema.json
 ├── scripts/
 │   └── build-site.mjs
 ├── package.json
@@ -192,7 +203,8 @@ pnpm run skills:update
 ## Maintenance
 
 - Edit slide content in `decks/<slug>/slides.md`.
-- Edit deck metadata in `decks/<slug>/deck.json`.
+- Edit deck title and description in `decks/<slug>/slides.md` frontmatter.
+- Edit deck sort order in `decks/<slug>/deck.json`.
 - Keep dependencies reproducible with `pnpm-lock.yaml`.
 - Run `pnpm run build` before pushing meaningful slide changes.
 - Run `pnpm run skills:update` when intentionally refreshing project skills.

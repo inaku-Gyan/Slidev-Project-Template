@@ -50,25 +50,25 @@ It is deployed to:
 
 # Metadata
 
-The home page reads this file:
+The home page reads `title` and `info` from:
+
+```text
+decks/demo-two/slides.md
+```
+
+The deck config file only controls sorting:
 
 ```text
 decks/demo-two/deck.json
 ```
-
-It provides:
-
-- Title
-- Description
-- Sort order
 
 ---
 
 # Add Another Deck
 
 1. Copy `decks/demo-two/` to `decks/my-talk/`
-2. Update `decks/my-talk/deck.json`
-3. Edit `decks/my-talk/slides.md`
+2. Update `order` in `decks/my-talk/deck.json`
+3. Edit `title` and `info` in `decks/my-talk/slides.md`
 4. Run `pnpm run build`
 
 ---

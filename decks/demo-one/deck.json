@@ -1,5 +1,4 @@
 {
-  "title": "Demo One",
-  "description": "A first demo deck for static GitHub Pages deployment.",
+  "$schema": "../../schemas/deck.schema.json",
   "order": 1
 }

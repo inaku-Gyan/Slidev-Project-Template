@@ -20,6 +20,7 @@
     "prettier": "^3.8.4",
     "prettier-plugin-slidev": "^1.0.5",
     "skills": "1.5.11",
-    "slidev-theme-dracula": "^0.2.0"
+    "slidev-theme-dracula": "^0.2.0",
+    "yaml": "^2.9.0"
   }
 }

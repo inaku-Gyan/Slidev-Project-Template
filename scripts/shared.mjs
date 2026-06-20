@@ -9,6 +9,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parse as parseYaml } from "yaml";
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const decksDir = resolve(root, "decks");
@@ -23,6 +24,7 @@ export const slidevBin = join(
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const pathLikePattern = /[\\/]|\.md$/i;
+const allowedDeckConfigKeys = new Set(["$schema", "order"]);
 
 export function normalizeBasePath(value) {
   const raw = value?.trim() || "/";
@@ -95,26 +97,91 @@ async function readJson(filePath) {
   }
 }
 
+async function readSlideFrontmatter(filePath) {
+  const contents = await readFile(filePath, "utf8");
+  const match = contents.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
+
+  if (!match) {
+    throw new Error(
+      `${relative(root, filePath)} must start with YAML frontmatter.`,
+    );
+  }
+
+  try {
+    return parseYaml(match[1]) ?? {};
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `${relative(root, filePath)} frontmatter is not valid YAML: ${message}`,
+    );
+  }
+}
+
+function normalizeDescription(value) {
+  return String(value).trim().replace(/\s+/g, " ");
+}
+
+function validateDeckConfig(slug, metadata) {
+  if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+    throw new Error(`${slug}/deck.json must be a JSON object.`);
+  }
+
+  const unknownKeys = Object.keys(metadata).filter(
+    (key) => !allowedDeckConfigKeys.has(key),
+  );
+
+  if (unknownKeys.length > 0) {
+    throw new Error(
+      `${slug}/deck.json may only define $schema and order. Move title and info to slides.md frontmatter.`,
+    );
+  }
+
+  if (metadata.$schema !== undefined && typeof metadata.$schema !== "string") {
+    throw new Error(`${slug}/deck.json $schema must be a string.`);
+  }
+
+  if (!Number.isInteger(metadata.order) || metadata.order < 1) {
+    throw new Error(`${slug}/deck.json order must be a positive integer.`);
+  }
+}
+
+function validateSlideMetadata(entry, frontmatter) {
+  if (
+    !frontmatter ||
+    typeof frontmatter !== "object" ||
+    Array.isArray(frontmatter)
+  ) {
+    throw new Error(
+      `${relative(root, entry)} frontmatter must be a YAML object.`,
+    );
+  }
+
+  if (
+    !frontmatter.title ||
+    typeof frontmatter.title !== "string" ||
+    !frontmatter.title.trim()
+  ) {
+    throw new Error(
+      `${relative(root, entry)} frontmatter must define a string title.`,
+    );
+  }
+
+  if (
+    !frontmatter.info ||
+    typeof frontmatter.info !== "string" ||
+    !frontmatter.info.trim()
+  ) {
+    throw new Error(
+      `${relative(root, entry)} frontmatter must define a string info description.`,
+    );
+  }
+}
+
 function validateDeck(deck) {
   if (!slugPattern.test(deck.slug)) {
     throw new Error(
       `Invalid deck directory "${deck.slug}". Use lowercase letters, numbers, and single hyphens.`,
     );
-  }
-
-  if (!deck.title || typeof deck.title !== "string") {
-    throw new Error(`${deck.slug}/deck.json must define a string title.`);
-  }
-
-  if (!deck.description || typeof deck.description !== "string") {
-    throw new Error(`${deck.slug}/deck.json must define a string description.`);
-  }
-
-  if (
-    deck.order !== undefined &&
-    (!Number.isInteger(deck.order) || deck.order < 1)
-  ) {
-    throw new Error(`${deck.slug}/deck.json order must be a positive integer.`);
   }
 
   if (!existsSync(deck.entry)) {
@@ -125,22 +192,28 @@ function validateDeck(deck) {
 export async function readDeck(slug) {
   const deckDir = join(decksDir, slug);
   const metadataPath = join(deckDir, "deck.json");
+  const entry = join(deckDir, "slides.md");
 
   if (!existsSync(metadataPath)) {
     throw new Error(`${relative(root, deckDir)} is missing deck.json.`);
   }
 
-  const metadata = await readJson(metadataPath);
-  const deck = {
-    slug,
-    title: metadata.title,
-    description: metadata.description,
-    order: metadata.order,
-    entry: join(deckDir, "slides.md"),
-  };
-
+  const deck = { slug, entry };
   validateDeck(deck);
-  return deck;
+
+  const metadata = await readJson(metadataPath);
+  validateDeckConfig(slug, metadata);
+
+  const frontmatter = await readSlideFrontmatter(entry);
+  validateSlideMetadata(entry, frontmatter);
+
+  return {
+    slug,
+    title: frontmatter.title.trim(),
+    description: normalizeDescription(frontmatter.info),
+    order: metadata.order,
+    entry,
+  };
 }
 
 export async function resolveDeckSlug(value, command) {

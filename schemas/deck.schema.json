@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Slidev Deck Site Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["order"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for editor validation."
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Sort order for the generated deck index."
+    }
+  }
+}

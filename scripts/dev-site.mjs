@@ -216,7 +216,10 @@ function watchDevFiles(decks, broadcastReload) {
     join(siteDir, "index.html"),
     join(siteDir, "404.html"),
     join(siteDir, "styles.css"),
-    ...decks.map((deck) => join(root, "decks", deck.slug, "deck.json")),
+    ...decks.flatMap((deck) => [
+      join(root, "decks", deck.slug, "deck.json"),
+      join(root, "decks", deck.slug, "slides.md"),
+    ]),
   ];
   const watchers = [];
 
