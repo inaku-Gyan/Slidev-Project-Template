@@ -270,22 +270,55 @@ function styleTerminal(text, code) {
 }
 
 function printDevServerSummary(routeByPath) {
-  const divider = styleTerminal("=".repeat(64), "36");
-  const title = styleTerminal("Slidev site dev server", "1;36");
-  const siteUrl = styleTerminal(`http://${host}:${sitePort}/`, "1");
+  const blue = (text) => styleTerminal(text, "34");
+  const cyan = (text) => styleTerminal(text, "36");
+  const gray = (text) => styleTerminal(text, "90");
+  const green = (text) => styleTerminal(text, "32");
+  const white = (text) => styleTerminal(text, "97");
+  const shortcut = (text, key) => {
+    const keyIndex = text.indexOf(key);
+
+    if (keyIndex === -1) {
+      return gray(text);
+    }
+
+    return [
+      gray(text.slice(0, keyIndex)),
+      styleTerminal(key, "97;4"),
+      gray(text.slice(keyIndex + key.length)),
+    ].join("");
+  };
+  const label = (text) => gray(text.padEnd(20));
+  const pointer = white(">");
+  const printLink = (name, url, color = blue) => {
+    console.log(`  ${label(name)} ${pointer} ${color(url)}`);
+  };
 
   console.log("");
-  console.log(divider);
-  console.log(`${title}: ${siteUrl}`);
+  console.log(`  ${white("Slidev site")}  ${green("dev server")}`);
   console.log("");
+  printLink("main public site", `http://${host}:${sitePort}/`, cyan);
   for (const { deck, port } of routeByPath.values()) {
-    const path = styleTerminal(`/${deck.route}/`, "1");
-    const url = styleTerminal(`http://${host}:${port}/${deck.route}/`, "1");
-    console.log(`  ${path} -> ${url}`);
+    const deckUrl = `http://${host}:${port}/${deck.route}/`;
+
+    console.log("");
+    console.log(`  ${deck.title}`);
+    printLink("public slide show", deckUrl, cyan);
+    printLink("presenter mode", `${deckUrl}presenter/`);
+    printLink("export slides", `${deckUrl}export/`);
   }
   console.log("");
-  console.log("  shortcuts           > restart | open | edit | quit");
-  console.log(divider);
+  console.log(
+    `  ${label("shortcuts")} ${pointer} ${[
+      shortcut("restart", "r"),
+      gray("|"),
+      shortcut("open", "o"),
+      gray("|"),
+      shortcut("edit", "e"),
+      gray("|"),
+      shortcut("quit", "q"),
+    ].join(" ")}`,
+  );
 }
 
 function shutdown(code = 0) {
