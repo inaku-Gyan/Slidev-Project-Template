@@ -122,18 +122,37 @@ async function ensurePortsAvailable(decks) {
 }
 
 function startSlidevDeck(deck, port) {
+  let markReady;
+  let readyOutput = "";
+  const ready = new Promise((resolve) => {
+    markReady = resolve;
+  });
   const entry = relative(root, deck.entry);
   const child = spawn(
     slidevBin,
     [entry, "--port", String(port), "--base", `/${deck.route}/`],
     {
       cwd: root,
-      stdio: "inherit",
+      stdio: ["inherit", "pipe", "pipe"],
       env: process.env,
     },
   );
 
+  child.stdout?.on("data", (chunk) => {
+    readyOutput += chunk;
+
+    if (/\n\s*shortcuts\s*>/.test(readyOutput)) {
+      markReady();
+    }
+  });
+
+  child.stderr?.on("data", (chunk) => {
+    process.stderr.write(chunk);
+  });
+
   child.once("exit", (code, signal) => {
+    markReady();
+
     if (shuttingDown) {
       return;
     }
@@ -151,7 +170,7 @@ function startSlidevDeck(deck, port) {
     shutdown(normalStop ? 0 : 1);
   });
 
-  return child;
+  return { child, ready };
 }
 
 function proxyHttpRequest(req, res, targetPort) {
@@ -245,6 +264,30 @@ let closeWatchers = () => {};
 let server;
 let shuttingDown = false;
 
+function styleTerminal(text, code) {
+  const shouldColor = process.stdout.isTTY && !process.env.NO_COLOR;
+  return shouldColor ? `\u001B[${code}m${text}\u001B[0m` : text;
+}
+
+function printDevServerSummary(routeByPath) {
+  const divider = styleTerminal("=".repeat(64), "36");
+  const title = styleTerminal("Slidev site dev server", "1;36");
+  const siteUrl = styleTerminal(`http://${host}:${sitePort}/`, "1");
+
+  console.log("");
+  console.log(divider);
+  console.log(`${title}: ${siteUrl}`);
+  console.log("");
+  for (const { deck, port } of routeByPath.values()) {
+    const path = styleTerminal(`/${deck.route}/`, "1");
+    const url = styleTerminal(`http://${host}:${port}/${deck.route}/`, "1");
+    console.log(`  ${path} -> ${url}`);
+  }
+  console.log("");
+  console.log("  shortcuts           > restart | open | edit | quit");
+  console.log(divider);
+}
+
 function shutdown(code = 0) {
   if (shuttingDown) {
     return;
@@ -280,9 +323,10 @@ async function main() {
       { deck, port: firstDeckPort + index },
     ]),
   );
-  for (const { deck, port } of routeByPath.values()) {
-    children.push(startSlidevDeck(deck, port));
-  }
+  const deckServers = [...routeByPath.values()].map(({ deck, port }) =>
+    startSlidevDeck(deck, port),
+  );
+  children.push(...deckServers.map(({ child }) => child));
 
   closeWatchers = watchDevFiles(startupDecks, () => {
     for (const client of eventClients) {
@@ -352,11 +396,10 @@ async function main() {
     proxyWebSocket(req, socket, head, route.port);
   });
 
-  server.listen(sitePort, host, () => {
-    console.log(`Slidev site dev server: http://${host}:${sitePort}/`);
-    for (const { deck, port } of routeByPath.values()) {
-      console.log(`- /${deck.route}/ -> http://${host}:${port}/${deck.route}/`);
-    }
+  server.listen(sitePort, host, async () => {
+    await Promise.all(deckServers.map(({ ready }) => ready));
+
+    printDevServerSummary(routeByPath);
   });
 }
 
