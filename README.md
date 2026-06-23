@@ -69,7 +69,8 @@ pnpm run build
 
 The static site is generated in `dist/`.
 
-The home page is generated at `dist/index.html`. Each deck is generated under its configured directory slug:
+The home page is generated at `dist/index.html`. Each deck is generated under
+its configured public route:
 
 ```text
 dist/
@@ -102,8 +103,8 @@ The workflow sets `BASE_PATH` automatically:
 The generated site uses static file routes:
 
 - `/` opens the deck index.
-- `/demo-one/` opens the first demo deck.
-- `/demo-two/` opens the second demo deck.
+- `/demo-one/` opens the first demo deck when its route is `demo-one`.
+- `/demo-two/` opens the second demo deck when its route is `demo-two`.
 - `/demo-one` and `/demo-two` redirect to the matching trailing-slash route.
 - Unknown paths such as `/unknown`, `/demo-one/foo`, and `/demo-two/foo` return 404.
 - Slide routes use hash URLs, such as `/demo-one/#/1`, so page refreshes still request the real `/demo-one/` entry.
@@ -132,18 +133,24 @@ info: |
 ---
 ```
 
-`deck.json` controls site-level sorting and visibility:
+`deck.json` controls site-level sorting, visibility, and the optional public
+route:
 
 ```json
 {
   "$schema": "../../schemas/deck.schema.json",
   "order": 2,
-  "visibility": "listed"
+  "visibility": "listed",
+  "route": "demo-two"
 }
 ```
 
-- The directory name is the deck slug for commands, such as `pnpm dev demo-one`,
-  and the public route, such as `/demo-one/`.
+- The directory name is the deck slug for commands, such as `pnpm dev demo-one`.
+- `route` is optional and controls the public URL, Slidev base path, and build
+  output directory. If omitted, it defaults to the directory slug.
+- For example, `decks/demo-one/deck.json` can set `"route": "intro"` so the
+  command remains `pnpm dev demo-one`, while the public route is `/intro/` and
+  the build output is `dist/intro/`.
 - `title` and `info` from `slides.md` are shown on the home page.
 - `order` in `deck.json` controls home page sorting.
 - `visibility` in `deck.json` is optional and defaults to `listed`:
@@ -151,7 +158,9 @@ info: |
   - `hidden` is skipped by full-site dev/build, but direct `pnpm dev <slug>` and `pnpm export <slug>` still work.
   - `disabled` is treated as unavailable, including direct deck commands.
 
-To add another deck, copy `decks/demo-two/` to `decks/my-talk/`, update `order` and optional `visibility` in `deck.json`, edit `title` and `info` in `slides.md`, then run `pnpm run build`.
+To add another deck, copy `decks/demo-two/` to `decks/my-talk/`, update
+`order`, optional `visibility`, and optional `route` in `deck.json`, edit
+`title` and `info` in `slides.md`, then run `pnpm run build`.
 
 ## Export
 
